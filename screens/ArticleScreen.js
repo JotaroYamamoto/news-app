@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, FlatList, SafeAreaView, Text } from 'react-native';
-
+import React from 'react';
+import { StyleSheet, SafeAreaView, Text, TouchableOpacity } from 'react-native';
+import { WebView } from 'react-native-webview';
+import { useDispatch } from 'react-redux';
+import { addClip, deleteClip } from '../store/actions/user';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -8,10 +10,27 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function ArticleScreen() {
+export default ArticleScreen = ({ route }) => {
+  const { article } = route.params;
+  const dispatch = useDispatch();
+  console.log(article);
   return (
-    <SafeAreaView>
-      <Text>This is Article Screen</Text>
+    <SafeAreaView style={styles.container}>
+      <TouchableOpacity
+        onPress={() => {
+          dispatch(addClip({ clip: article }));
+        }}
+      >
+        <Text style={{ margin: 10, fontSize: 30 }}>ADD_CLIP</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => {
+          dispatch(deleteClip({ clip: article }));
+        }}
+      >
+        <Text style={{ margin: 10, fontSize: 30 }}>DELETE_CLIP</Text>
+      </TouchableOpacity>
+      <WebView source={{ uri: article.url }} />
     </SafeAreaView>
   );
-}
+};
